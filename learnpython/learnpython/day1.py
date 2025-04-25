@@ -6,17 +6,8 @@ def process_string(inp_str):
     first_number = 0
     second_number = 0 
 
-    if(len(num) == 1):
-        str_num = str(num[0])
-        #print("The number: " + str_num)
-        first_number = str_num[0]
-        #print("First number: " + first_number)
-        second_number = str_num[len(str_num)-1]
-
-        #print("Second number: " + second_number)
-    else:
-        first_number = int(str(num[0])[0])
-        second_number = int(str(num[len(num)-1])[0])
+    first_number = int(str(num[0]))
+    second_number = int(str(num[len(num)-1]))
     
     result = str(first_number) + str(second_number)
     return int(result)
@@ -43,4 +34,3 @@ def read_file_and_process_input():
     return res
 
 read_file_and_process_input()
-#process_string("treb7uchet")
