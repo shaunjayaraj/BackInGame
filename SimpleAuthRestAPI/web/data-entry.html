@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Data Entry</title>
+</head>
+<body>
+  <h1>Data Entry</h1>
+
+  <input id="dataInput" placeholder="Enter something"/>
+  <button id="saveBtn">Save</button>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const value = document.getElementById('dataInput').value.trim();
+      const status = document.getElementById('status');
+
+      if (!value) {
+        status.textContent = "Please enter a value.";
+        return;
+      }
+
+      // For now, just show it locally; we’ll wire to an API in a later step.
+      status.textContent = "Saved (demo): " + value;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Login Page</title>
+</head>
+<body>
+  <h1>Login</h1>
+
+  <input id="username" placeholder="Username"><br><br>
+  <input id="password" placeholder="Password" type="password"><br><br>
+  <button id="loginBtn">Login</button>
+
+  <p id="result"></p>
+
+  <script>
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const result = document.getElementById('result');
+
+      result.textContent = "Logging in...";
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          result.textContent = "Error: " + (err.detail || "Login failed");
+          return;
+        }
+
+        const data = await res.json();
+        result.textContent = data.message;  // "Login successful"
+        window.location.replace("/data_entry")
+        
+      } catch (error) {
+        result.textContent = "Network error";
+      }
+    });
+  </script>
+</body>
+</html>
