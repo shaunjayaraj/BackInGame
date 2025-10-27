@@ -17,7 +17,14 @@ def create_access_token(payload: dict, expires_minutes: int = ACCESS_TOKEN_EXPIR
     to_encode["exp"] = int(time.time()) + ACCESS_TOKEN_EXPIRE_MINUTES * 60
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-
+def verify_token(token: str) -> dict:
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
 app = FastAPI()
 
 # Simple welcome endpoint
@@ -55,7 +62,7 @@ def login(payload: dict):
         token = create_access_token({"sub": username})
 
         resp = JSONResponse({"ok": True, "message": "Login successful"})
-
+        """
         resp.set_cookie(
             key="logged_in",
             value="yes",
@@ -63,7 +70,7 @@ def login(payload: dict):
             secure=False,   # set True when you move to HTTPS in prod
             path="/"
         )
-
+        """
         # NEW: HttpOnly JWT cookie
         resp.set_cookie(
             key="access_token",
@@ -84,7 +91,17 @@ def login(payload: dict):
 
 @app.get("/data_entry", response_class=HTMLResponse)
 def serve_app_page(request: Request):
+    """
     if request.cookies.get("logged_in") != "yes":
         # not logged in -> go to /login
+        return RedirectResponse(url="/login", status_code=HTTP_303_SEE_OTHER)
+    return read_file("web/data-entry.html")
+    """
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse(url="/login", status_code=HTTP_303_SEE_OTHER)
+    try:
+        verify_token(token)  # raises if invalid/expired
+    except HTTPException:
         return RedirectResponse(url="/login", status_code=HTTP_303_SEE_OTHER)
     return read_file("web/data-entry.html")

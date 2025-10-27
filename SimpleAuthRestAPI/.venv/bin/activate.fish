@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/shaunjayaraj/Library/CloudStorage/Dropbox/projects/SimpleAuthRestAPI/.venv"
+set -gx VIRTUAL_ENV "/Users/shaunjayaraj/Library/CloudStorage/Dropbox/projects/BackInGame/SimpleAuthRestAPI/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
